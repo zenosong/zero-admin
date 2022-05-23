@@ -1,0 +1,8 @@
+import "sys/user.api"
+
+
+
+info (
+    desc: "zero admin"
+    author: "zeno"
+)

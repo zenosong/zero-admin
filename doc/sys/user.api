@@ -1,0 +1,72 @@
+syntax = "v1"
+
+info(
+	title: "用户接口"
+	desc: "用户相关接口"
+	author: "zeno"
+	email: 476937654@qq.com
+	version: 1.0
+)
+
+type RegisterReq {
+	Username string `json:"username"`
+	Mobile   string `json:"mobile"`
+	Password string `json:"password"`
+	Smscode  string `json:"smscode"`
+}
+
+type LoginReq {
+	Username string `json:"username"`
+	Mobile   string `json:"mobile"`
+	Password string `json:"password"`
+	Smscode  string `json:"smscode"`
+}
+
+type UserRsp {
+	Id       int64  `json:"id"`
+	Username string `json:"username"`
+	Mobile   string `json:"mobile"`
+	Nickname string `json:"nickname"`
+	Avator   string `json:"avator"`
+	Gender   string `json:"gender"`
+	JwtToken
+}
+
+type JwtToken {
+	AccessToken  string `json:"accessToken,omitempty"`
+	AccessExpire int64  `json:"accessExpire,omitempty"`
+	RefreshAfter int64  `json:"refreshAfter,omitempty"`
+}
+
+service user-api {
+	@doc(
+		summary: 接口测试
+	)
+	@handler ping
+	get /user/ping()
+	
+	@doc(
+		summary: 注册
+	)
+	@handler register
+	post /user/register(RegisterReq) returns(UserRsp)
+	
+	@doc(
+		summary: 登陆
+	)
+	@handler login
+	post /user/login(LoginReq) returns(UserRsp)
+	
+}
+
+@server(
+	jwt: Auth
+	middleware: Permission
+)
+service user-api {
+	@doc(
+		summary: 用户信息
+	)
+	@handler userInfo
+	get /user/info () returns (UserRsp)
+}
